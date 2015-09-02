@@ -14,7 +14,7 @@ my $ConfigFile = "$basedir/slack-archive.conf";
 my @tokens;
 if ( -f $ConfigFile ) {
   my $config = YAML::Tiny->read($ConfigFile);
-  @tokens = @{$config->{tokens}};
+  @tokens = @{$config->[0]->{tokens}};
 }
 
 
@@ -33,7 +33,7 @@ my $obj = new CGI;
 
 my $token = $obj->{token};
 
-if (not grep $token, @tokens) {
+if ( $token eq '' or   grep( /$token/, @tokens) == 0 ) {
   print $obj->header(-status => 403,
 		     -type => "text/html");
   print "Error!";
@@ -49,9 +49,9 @@ if ( -f "$log" ) {
 			     }
 
 push @$data, {
-		text => $obj->param('text'),
-		user => $obj->param('user_name'),
-		time => $obj->param('timestamp')
+		text => scalar($obj->param('text')),
+		user => scalar($obj->param('user_name')),
+		time => scalar($obj->param('timestamp'))
 	       };
 store($data, "$log");
 
