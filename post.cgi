@@ -3,16 +3,10 @@
 use strict;
 use CGI;
 use Storable;
+use Cwd;
 
-my $test = 0;
-my $basedir = "/usr/local/www/a11yj.ma10.jp/htdocs";
-my $log_prefix = "ch_";
+my $basedir = getcwd;
 my $userfile = "$basedir/users";
-
-if ( $test ) {
-  $log_prefix = "test_ch_";
-  $userfile = "$basedir/test_users";
-}
 
 my $obj = new CGI;
 
@@ -29,7 +23,7 @@ my $obj = new CGI;
 my $logfile = $obj->param('channel_name');
 $logfile =~s|[^a-zA-Z0-9_-]||g;
 my $data = [];
-my $log = "$basedir/$log_prefix$logfile";
+my $log = "$basedir/ch_$logfile";
 if ( -f "$log" ) {
 			      $data = retrieve("$log");
 			     }
@@ -49,7 +43,7 @@ $users->{$obj->param('user_id')} = $obj->param('user_name');
 store($users, "$userfile");
 
 
-open(OUT, " >> $basedir/_$log_prefix$logfile.csv");
+open(OUT, " >> $basedir/_ch_$logfile.csv");
 my $text = $obj->param('text');
 $text =~s/"/""/;
 print OUT $obj->param('channel_name') . ", " . $obj->param('timestamp') . ", " . $obj->param('user_name') . ', ' . '"' . $text . '"' . "\n";

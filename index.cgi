@@ -4,19 +4,11 @@ use strict;
 use utf8;
 use CGI;
 use Storable;
+use Cwd;
 
-my $test = 0;
-my $basedir = "/usr/local/www/a11yj.ma10.jp/htdocs";
+my $basedir = getcwd;
 my $url = "http://a11yj.ma10.jp/";
-my $log_prefix = "ch_";
 my $userfile = "$basedir/users";
-
-if ( $test ) {
-  $url = "http://a11yj.ma10.jp/index2.cgi";
-  $log_prefix = "test_ch_";
-  $userfile = "$basedir/test_users";
-}
-
 
 my $obj = new CGI;
 
@@ -50,12 +42,12 @@ sub list {
 EOM
 
   opendir(my $dh, $basedir) or die "Can't open $basedir\n";
-  my @channels = grep { /^$log_prefix.+$/ && -f "$basedir/$_" } readdir($dh);
+  my @channels = grep { /^ch_.+$/ && -f "$basedir/$_" } readdir($dh);
   closedir($dh);
 
   print "<ul>\n";
   foreach (@channels) {
-    $_ =~ m/^$log_prefix(.+)$/;
+    $_ =~ m/^ch_(.+)$/;
     my $ch = $1;
     print "<li><a href=\"$url?channel=$ch\">#$ch</a></li>\n";
   }
@@ -67,7 +59,7 @@ EOM
 sub show {
   my $channel = shift;
 
-  my $data = retrieve("$basedir/$log_prefix$channel");
+  my $data = retrieve("$basedir/ch_$channel");
   my $users = {};
   if ( -f $userfile ) {
     $users = retrieve("$userfile");
