@@ -31,9 +31,9 @@ my $obj = new CGI;
 # text=googlebot: What is the air-speed velocity of an unladen swallow?
 # trigger_word=googlebot:
 
-my $token = $obj->{token};
+my $token = $obj->param('token');
 
-if ( $token eq '' or   grep( /$token/, @tokens) == 0 ) {
+if ( $token eq '' or grep(/$token/, @tokens) == 0 ) {
   print $obj->header(-status => 403,
 		     -type => "text/html");
   print "Error!";
@@ -66,7 +66,7 @@ store($users, "$userfile");
 open(OUT, " >> $basedir/_ch_$logfile.csv");
 my $text = $obj->param('text');
 $text =~s/"/""/;
-print OUT $obj->param('channel_name') . ", " . $obj->param('timestamp') . ", " . $obj->param('user_name') . ', ' . '"' . $text . '"' . "\n";
+print OUT $obj->param('token') . ", " . $obj->param('channel_name') . ", " . $obj->param('timestamp') . ", " . $obj->param('user_name') . ', ' . '"' . $text . '"' . "\n";
 close(OUT);
 print $obj->header(-type => 'text/html;charset=utf-8');
 exit;
