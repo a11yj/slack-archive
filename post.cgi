@@ -4,9 +4,19 @@ use strict;
 use CGI;
 use Storable;
 use Cwd;
+use YAML::Tiny;
 
+# Reasonable defaults
 my $basedir = getcwd;
 my $userfile = "$basedir/users";
+my $ConfigFile = "$basedir/slack-archive.conf";
+
+my @tokens;
+if ( -f $ConfigFile ) {
+  my $config = YAML::Tiny->read($ConfigFile);
+  @tokens = @{$config->{tokens}};
+}
+
 
 my $obj = new CGI;
 
@@ -20,6 +30,16 @@ my $obj = new CGI;
 # user_name=Steve
 # text=googlebot: What is the air-speed velocity of an unladen swallow?
 # trigger_word=googlebot:
+
+my $token = $obj->{token};
+
+if (not grep $token, @tokens) {
+  print $obj->header(-status => 403,
+		     -type => "text/html");
+  print "Error!";
+  exit;
+}
+  
 my $logfile = $obj->param('channel_name');
 $logfile =~s|[^a-zA-Z0-9_-]||g;
 my $data = [];
