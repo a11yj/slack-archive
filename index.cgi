@@ -94,6 +94,7 @@ EOM
     print "<li>$msg->{user}: $text";
     my ($sec, $min, $hr, $day, $mon, $year) = localtime($msg->{time});
     $year += 1900;
+    $mon++;
     print "<br>($year/$mon/$day $hr:$min:$sec)</li>\n";
   }
   print '</ul><p><a href="/">アーカイブ・リストに戻る</a> - <a href="https://a11yj.herokuapp.com/">このSlack Teamに参加する</a></p></body></html>';
