@@ -8,8 +8,9 @@ use YAML::Tiny;
 
 # Reasonable defaults
 my $basedir = getcwd;
-my $userfile = "$basedir/users";
-my $ConfigFile = "$basedir/slack-archive.conf";
+my $datadir = "$basedir/data";
+my $userfile = "$datadir/users";
+my $ConfigFile = "$datadir/slack-archive.conf";
 
 my @tokens;
 if ( -f $ConfigFile ) {
@@ -43,7 +44,7 @@ if ( $token eq '' or grep(/$token/, @tokens) == 0 ) {
 my $logfile = $obj->param('channel_name');
 $logfile =~s|[^a-zA-Z0-9_-]||g;
 my $data = [];
-my $log = "$basedir/ch_$logfile";
+my $log = "$datadir/ch_$logfile";
 if ( -f "$log" ) {
 			      $data = retrieve("$log");
 			     }
@@ -63,7 +64,7 @@ $users->{$obj->param('user_id')} = $obj->param('user_name');
 store($users, "$userfile");
 
 
-open(OUT, " >> $basedir/_ch_$logfile.csv");
+open(OUT, " >> $datadir/_ch_$logfile.csv");
 my $text = $obj->param('text');
 $text =~s/"/""/;
 print OUT $obj->param('token') . ", " . $obj->param('channel_name') . ", " . $obj->param('timestamp') . ", " . $obj->param('user_name') . ', ' . '"' . $text . '"' . "\n";

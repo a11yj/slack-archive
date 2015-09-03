@@ -8,7 +8,8 @@ use Cwd;
 
 my $basedir = getcwd;
 my $url = "http://a11yj.ma10.jp/";
-my $userfile = "$basedir/users";
+my $datadir = "$basedir/data";
+my $userfile = "$datadir/users";
 
 my $obj = new CGI;
 
@@ -41,8 +42,8 @@ sub list {
 <p>以下のチャンネルのアーカイブを提供しています。</p>
 EOM
 
-  opendir(my $dh, $basedir) or die "Can't open $basedir\n";
-  my @channels = grep { /^ch_.+$/ && -f "$basedir/$_" } readdir($dh);
+  opendir(my $dh, $datadir) or die "Can't open $datadir\n";
+  my @channels = grep { /^ch_.+$/ && -f "$datadir/$_" } readdir($dh);
   closedir($dh);
 
   print "<ul>\n";
@@ -59,7 +60,7 @@ EOM
 sub show {
   my $channel = shift;
 
-  my $data = retrieve("$basedir/ch_$channel");
+  my $data = retrieve("$datadir/ch_$channel");
   my $users = {};
   if ( -f $userfile ) {
     $users = retrieve("$userfile");
