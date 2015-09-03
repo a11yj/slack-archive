@@ -5,11 +5,18 @@ use utf8;
 use CGI;
 use Storable;
 use Cwd;
+use YAML::Tiny;
 
 my $basedir = getcwd;
-my $url = "http://a11yj.ma10.jp/";
 my $datadir = "$basedir/data";
+my $ConfigFile = "$datadir/slack-archive.conf";
 my $userfile = "$datadir/users";
+my $url = "http://a11yj.ma10.jp/";
+
+if ( -f $ConfigFile ) {
+  my $config = YAML::Tiny->read("$ConfigFile");
+  $url = $config->[0]->{url};
+}
 
 my $obj = new CGI;
 
