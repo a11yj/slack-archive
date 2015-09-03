@@ -5,11 +5,18 @@ use utf8;
 use CGI;
 use Storable;
 use Cwd;
+use YAML::Tiny;
 
 my $basedir = getcwd;
-my $url = "http://a11yj.ma10.jp/";
 my $datadir = "$basedir/data";
+my $ConfigFile = "$datadir/slack-archive.conf";
 my $userfile = "$datadir/users";
+my $url = "http://a11yj.ma10.jp/";
+
+if ( -f $ConfigFile ) {
+  my $config = YAML::Tiny->read("$ConfigFile");
+  $url = $config->[0]->{url};
+}
 
 my $obj = new CGI;
 
@@ -18,15 +25,15 @@ my $action = 'list';
 
 if ( $channel ne '' ) {
   $action = 'show';
-  }
+}
 print $obj->header(-type => 'text/html;charset=utf-8');
 
 
 if ( $action eq 'list' ) {
   &list;
-  } elsif ( $action eq 'show' ) {
-    &show($channel);
-    }
+} elsif ( $action eq 'show' ) {
+  &show($channel);
+}
 
 exit;
 
@@ -81,17 +88,17 @@ EOM
     my $mention_uid = "";
     $text =~ m/<@([^>]+)>/;
     $mention_uid = $1 if ( defined($1) );
-			   if ( $mention_uid ne '' ) {
-			     my $mention_name = $mention_uid;
-			     if ( exists($users->{$mention_uid}) ) {
-			       $mention_name = $users->{$mention_uid};
-			     }
-			     $text =~ s/<\@$mention_uid>/\@$mention_name/;
-			   }
+    if ( $mention_uid ne '' ) {
+      my $mention_name = $mention_uid;
+      if ( exists($users->{$mention_uid}) ) {
+	$mention_name = $users->{$mention_uid};
+      }
+      $text =~ s/<\@$mention_uid>/\@$mention_name/;
+    }
 			     
     $text =~ s/</&lt;/g;
     $text =~ s/>/&gt;/g;
-			   $text =~ s/\n/<br>/g;
+    $text =~ s/\n/<br>/g;
     print "<li>$msg->{user}: $text";
     my ($sec, $min, $hr, $day, $mon, $year) = localtime($msg->{time});
     $year += 1900;

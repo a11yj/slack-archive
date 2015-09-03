@@ -1,0 +1,11 @@
+---
+# Slack-archive configuration options
+
+# URL of index.cgi
+url: http://www.example.com/
+
+# Tokens to be accepted.
+# Posts without tokens listed here will not be archived.
+tokens:
+    - MtdvdIpJjhYfBdtVNbuISBVL #channel1
+    - KlioPOQdrTyu8CxZsAwiGhYb #channel2

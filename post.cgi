@@ -46,14 +46,14 @@ $logfile =~s|[^a-zA-Z0-9_-]||g;
 my $data = [];
 my $log = "$datadir/ch_$logfile";
 if ( -f "$log" ) {
-			      $data = retrieve("$log");
-			     }
+  $data = retrieve("$log");
+}
 
 push @$data, {
-		text => scalar($obj->param('text')),
+	      text => scalar($obj->param('text')),
 		user => scalar($obj->param('user_name')),
 		time => scalar($obj->param('timestamp'))
-	       };
+	     };
 store($data, "$log");
 
 my $users = {};
