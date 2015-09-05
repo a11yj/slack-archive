@@ -6,6 +6,7 @@ use CGI;
 use Storable;
 use Cwd;
 use YAML::Tiny;
+use Encode 'encode';
 
 my $basedir = getcwd;
 my $datadir = "$basedir/data";
@@ -137,7 +138,7 @@ my $linked_url = $1;
 	$text =~ s|&lt;$linked_url&gt;|<a href="$linked_url">$linked_url</a>|;
     }
         
-    print "<li>$msg->{user}: $text";
+    print "<li>$msg->{user}: " . encode('UTF-8', $text);
     my ($sec, $min, $hr, $day, $mon, $year) = localtime($msg->{time});
     $year += 1900;
     $mon++;
