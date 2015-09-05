@@ -108,26 +108,25 @@ my $linked_channel_id;
 
     while (     $text =~ m/<@([^>]+)>/ ) {
       $mention_uid = $1;
-	my $mention_name = $mention_uid;
-	if ( exists($users->{$mention_uid}) ) {
-	  $mention_name = $users->{$mention_uid};
-	}
-	$text =~ s/<\@$mention_uid>/\@$mention_name/;
+      my $mention_name = $mention_uid;
+      if ( exists($users->{$mention_uid}) ) {
+	$mention_name = $users->{$mention_uid};
+      }
+      $text =~ s/<\@$mention_uid>/\@$mention_name/;
     }
 
     while (     $text =~ m/<#([^>]+)>/ ) {
       $linked_channel_id = $1;
 	my $linked_channel_name = $linked_channel_id;
-foreach (@$chinfo) {
+      foreach (@$chinfo) {
 	if ( $_->{id} eq $linked_channel_id ) {
 		$linked_channel_name = $_->{name};
-	}
-  	}
+	      }
+      }
   	
 	$text =~ s/<#$linked_channel_id>/#$linked_channel_name/;
-      }
     }
-   
+    
     
     $text =~ s/</&lt;/g;
     $text =~ s/>/&gt;/g;
