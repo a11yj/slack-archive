@@ -52,7 +52,7 @@ if ( -f "$log" ) {
 }
 
 push @$data, {
-	      text => decode('UTF-8', ($obj->param('text')),
+	      text => decode('UTF-8', $obj->param('text')),
 		user => scalar($obj->param('user_name')),
 		time => scalar($obj->param('timestamp'))
 	     };
