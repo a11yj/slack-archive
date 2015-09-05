@@ -57,17 +57,20 @@ $chinfo = retrieve("$channelfile");
 
 my @channels;
 foreach (@$chinfo) {
-	if ( -f "$datadir/ch_$_->{name} ) {
+  if ( -f "$datadir/ch_$_->{name}" ) {
 		push @channels, $_;
 }
 }
 
   print "<ul>\n";
   foreach (@channels) {
-my $ch= $_->{name};
-my $updated = $_->{updated};
+    my $ch= $_->{name};
+    my ($sec, $min, $hr, $day, $mon, $year) = localtime($_->{updated});
+    $year += 1900;
+    $mon++;
+    my $updated = "$year-$mon-$day $hr:$min:$sec";
 
-    print "<li><a href=\"$url?channel=$ch\">#$ch ($updated)</a></li>\n";
+    print "<li><a href=\"$url?channel=$ch\">#$ch ($updated 更新)</a></li>\n";
   }
   print '</ul><p><a href="https://a11yj.herokuapp.com/">このSlack Teamに参加する</a></p></body></html>';
 
