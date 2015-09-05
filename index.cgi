@@ -11,6 +11,7 @@ my $basedir = getcwd;
 my $datadir = "$basedir/data";
 my $ConfigFile = "$datadir/slack-archive.conf";
 my $userfile = "$datadir/users";
+my $channelfile = "$datadir/channels";
 my $url = "http://a11yj.ma10.jp/";
 
 if ( -f $ConfigFile ) {
@@ -49,15 +50,27 @@ sub list {
 <p>以下のチャンネルのアーカイブを提供しています。</p>
 EOM
 
-  opendir(my $dh, $datadir) or die "Can't open $datadir\n";
-  my @channels = grep { /^ch_.+$/ && -f "$datadir/$_" } readdir($dh);
-  closedir($dh);
+my $chinfo;
+if ( -f $channelfile ) {
+$chinfo = retrieve("$channelfile");
+}
+
+my @channels;
+foreach (@$chinfo) {
+  if ( -f "$datadir/ch_$_->{name}" ) {
+		push @channels, $_;
+}
+}
 
   print "<ul>\n";
   foreach (@channels) {
-    $_ =~ m/^ch_(.+)$/;
-    my $ch = $1;
-    print "<li><a href=\"$url?channel=$ch\">#$ch</a></li>\n";
+    my $ch= $_->{name};
+    my ($sec, $min, $hr, $day, $mon, $year) = localtime($_->{updated});
+    $year += 1900;
+    $mon++;
+    my $updated = "$year-$mon-$day $hr:$min:$sec";
+
+    print "<li><a href=\"$url?channel=$ch\">#$ch ($updated 更新)</a></li>\n";
   }
   print '</ul><p><a href="https://a11yj.herokuapp.com/">このSlack Teamに参加する</a></p></body></html>';
 

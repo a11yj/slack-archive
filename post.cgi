@@ -11,6 +11,7 @@ my $basedir = getcwd;
 my $datadir = "$basedir/data";
 my $userfile = "$datadir/users";
 my $ConfigFile = "$datadir/slack-archive.conf";
+my $channelfile = "$datadir/channels";
 
 my @tokens;
 if ( -f $ConfigFile ) {
@@ -62,6 +63,17 @@ if ( -f "$userfile" ) {
 }
 $users->{$obj->param('user_id')} = $obj->param('user_name');
 store($users, "$userfile");
+
+my $channels = [];
+if ( -f "$channelfile" ) {
+  $channels = retrieve("$channelfile");
+}
+my $ch = { id => $obj->param('channel_id'),
+name => $obj->param('channel_name'),
+updated => time
+};
+push @$channels, $ch;
+store($channels, "$channelfile");
 
 
 open(OUT, " >> $datadir/_ch_$logfile.csv");
