@@ -111,28 +111,28 @@ my $linked_channel_id;
     $text =~ s/>/&gt;/g;
     $text =~ s/\n/<br>/g;
 
-    while ( $text =~ m/&lt;@(.+)&gt;/ ) {
+    while ( $text =~ m/&lt;\@(U.+?)&gt;/ ) {
       $mention_uid = $1;
       my $mention_name = $mention_uid;
       if ( exists($users->{$mention_uid}) ) {
-	$mention_name = $users->{$mention_uid};
+    	$mention_name = $users->{$mention_uid};
       }
       $text =~ s/&lt;\@$mention_uid&gt;/\@$mention_name/;
     }
-
-    while ( $text =~ m/&lt;#(.+)&gt;/ ) {
+    
+    while ( $text =~ m/&lt;#(C.+?)&gt;/ ) {
       $linked_channel_id = $1;
-	my $linked_channel_name = $linked_channel_id;
+      my $linked_channel_name = $linked_channel_id;
       foreach (@$chinfo) {
-	if ( $_->{id} eq $linked_channel_id ) {
-		$linked_channel_name = $_->{name};
-	      }
+    	if ( $_->{id} eq $linked_channel_id ) {
+	  $linked_channel_name = $_->{name};
+	}
       }
   	
-	$text =~ s/&lt;#$linked_channel_id&gt;/#$linked_channel_name/;
+      $text =~ s/&lt;#$linked_channel_id&gt;/#$linked_channel_name/;
     }
 
-    while ( $text =~ m|&lt;(https?://.+)&gt;| ) {
+    while ( $text =~ m|&lt;(https?://.+?)&gt;| ) {
 my $linked_url = $1;
   	
 	$text =~ s|&lt;$linked_url&gt;|<a href="$linked_url">$linked_url</a>|;
