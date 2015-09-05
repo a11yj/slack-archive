@@ -85,6 +85,11 @@ sub show {
   if ( -f $userfile ) {
     $users = retrieve("$userfile");
   }
+
+my $chinfo;
+if ( -f $channelfile ) {
+$chinfo = retrieve("$channelfile");
+}
   
   print << "EOM";
 <!DOCTYPE html>
@@ -99,18 +104,30 @@ EOM
   foreach my $msg (@$data) {
     my $text = $msg->{text};
     my $mention_uid = "";
+my $linked_channel_id;
 
-while (     $text =~ m/<@([^>]+)>/ ) {
-    $mention_uid = $1 if ( defined($1) );
-    if ( $mention_uid ne '' ) {
+    while (     $text =~ m/<@([^>]+)>/ ) {
+      $mention_uid = $1;
       my $mention_name = $mention_uid;
       if ( exists($users->{$mention_uid}) ) {
 	$mention_name = $users->{$mention_uid};
       }
       $text =~ s/<\@$mention_uid>/\@$mention_name/;
     }
-}
 
+    while (     $text =~ m/<#([^>]+)>/ ) {
+      $linked_channel_id = $1;
+	my $linked_channel_name = $linked_channel_id;
+      foreach (@$chinfo) {
+	if ( $_->{id} eq $linked_channel_id ) {
+		$linked_channel_name = $_->{name};
+	      }
+      }
+  	
+	$text =~ s/<#$linked_channel_id>/#$linked_channel_name/;
+    }
+    
+    
     $text =~ s/</&lt;/g;
     $text =~ s/>/&gt;/g;
     $text =~ s/\n/<br>/g;
