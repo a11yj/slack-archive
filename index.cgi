@@ -106,7 +106,7 @@ EOM
     my $mention_uid = "";
 my $linked_channel_id;
 
-    while (     $text =~ m/<@([^>]+)>/ ) {
+    while ( $text =~ m/<@([^>]+)>/ ) {
       $mention_uid = $1;
       my $mention_name = $mention_uid;
       if ( exists($users->{$mention_uid}) ) {
@@ -115,7 +115,7 @@ my $linked_channel_id;
       $text =~ s/<\@$mention_uid>/\@$mention_name/;
     }
 
-    while (     $text =~ m/<#([^>]+)>/ ) {
+    while ( $text =~ m/<#([^>]+)>/ ) {
       $linked_channel_id = $1;
 	my $linked_channel_name = $linked_channel_id;
       foreach (@$chinfo) {
@@ -126,8 +126,7 @@ my $linked_channel_id;
   	
 	$text =~ s/<#$linked_channel_id>/#$linked_channel_name/;
     }
-    
-    
+
     $text =~ s/</&lt;/g;
     $text =~ s/>/&gt;/g;
     $text =~ s/\n/<br>/g;
