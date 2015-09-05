@@ -130,7 +130,7 @@ my $linked_channel_id;
 
     while ( $text =~ m|<(https?://.+?)>| ) {
       my $linked_url = $1;
-      $text =~ s|<\Q$linked_url\E>|<a href="$linked_url">$linked_url</a>|m;
+      $text =~ s|<\Q$linked_url\E>|<a href="$linked_url">$linked_url</a>|;
     }
 
     $text =~ s/\n/<br>/g;
