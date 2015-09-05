@@ -5,6 +5,7 @@ use CGI;
 use Storable;
 use Cwd;
 use YAML::Tiny;
+use Encode qw(encode decode);
 
 # Reasonable defaults
 my $basedir = getcwd;
@@ -51,7 +52,7 @@ if ( -f "$log" ) {
 }
 
 push @$data, {
-	      text => scalar($obj->param('text')),
+	      text => decode('UTF-8', $obj->param('text')),
 		user => scalar($obj->param('user_name')),
 		time => scalar($obj->param('timestamp'))
 	     };
@@ -85,7 +86,7 @@ store($channels, "$channelfile");
 open(OUT, " >> $datadir/_ch_$logfile.csv");
 my $text = $obj->param('text');
 $text =~s/"/""/;
-print OUT $obj->param('token') . ", " . $obj->param('channel_name') . ", " . $obj->param('timestamp') . ", " . $obj->param('user_name') . ', ' . '"' . $text . '"' . "\n";
+print OUT $obj->param('token') . ", " . $obj->param('channel_name') . ", " . $obj->param('timestamp') . ", " . $obj->param('user_name') . ', ' . '"' . encode('UTF-8', $text) . '"' . "\n";
 close(OUT);
 print $obj->header(-type => 'text/html;charset=utf-8');
 exit;
