@@ -107,20 +107,16 @@ EOM
     my $mention_uid = "";
 my $linked_channel_id;
 
-    $text =~ s/</&lt;/g;
-    $text =~ s/>/&gt;/g;
-    $text =~ s/\n/<br>/g;
-
-    while ( $text =~ m/&lt;\@(U.+?)&gt;/ ) {
+    while ( $text =~ m/<\@(U.+?)>/ ) {
       $mention_uid = $1;
       my $mention_name = $mention_uid;
       if ( exists($users->{$mention_uid}) ) {
     	$mention_name = $users->{$mention_uid};
       }
-      $text =~ s/&lt;\@$mention_uid&gt;/\@$mention_name/;
+      $text =~ s/<\@$mention_uid>/\@$mention_name/;
     }
     
-    while ( $text =~ m/&lt;#(C.+?)&gt;/ ) {
+    while ( $text =~ m/<#(C.+?)>/ ) {
       $linked_channel_id = $1;
       my $linked_channel_name = $linked_channel_id;
       foreach (@$chinfo) {
@@ -129,14 +125,16 @@ my $linked_channel_id;
 	}
       }
   	
-      $text =~ s/&lt;#$linked_channel_id&gt;/#$linked_channel_name/;
+      $text =~ s/<#$linked_channel_id>/#$linked_channel_name/;
     }
 
-    while ( $text =~ m|&lt;(https?://.+?)&gt;| ) {
+    while ( $text =~ m|<(https?://.+?)>| ) {
 my $linked_url = $1;
   	
-	$text =~ s|&lt;$linked_url&gt;|<a href="$linked_url">$linked_url</a>|;
+	$text =~ s|<$linked_url>|<a href="$linked_url">$linked_url</a>|;
     }
+
+    $text =~ s/\n/<br>/g;
         
     print "<li>$msg->{user}: " . encode('UTF-8', $text);
     my ($sec, $min, $hr, $day, $mon, $year) = localtime($msg->{time});
