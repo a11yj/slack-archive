@@ -127,7 +127,7 @@ my $linked_channel_id;
 	$text =~ s/<#$linked_channel_id>/#$linked_channel_name/;
     }
 
-    while ( $text =~ m/<(https?://[^>]+)>/ ) {
+    while ( $text =~ m|<(https?://[^>]+)>| ) {
 my $linked_url = $1;
   	
 	$text =~ s|<$linked_url>|<a href="$linked_url">$linked_url</a>|;
