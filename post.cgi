@@ -74,7 +74,7 @@ updated => time
 };
 for (my $i = @$channels-1; $i >= 0; $i--) {
 if ( $channels->[$i]->{name} eq $ch->{name} ) {
-  delete($channels->[$i]);
+  splice(@$channels, $i, 1);
 }
 }
 
