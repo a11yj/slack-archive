@@ -64,7 +64,7 @@ foreach (@$chinfo) {
 }
 
   print "<ul>\n";
-  foreach (@channels) {
+  foreach (sort { $b->{updated} cmp $a->{updated} } @channels) {
     my $ch= $_->{name};
     my ($sec, $min, $hr, $day, $mon, $year) = localtime($_->{updated});
     $year += 1900;
