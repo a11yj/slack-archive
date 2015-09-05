@@ -100,17 +100,17 @@ EOM
     my $text = $msg->{text};
     my $mention_uid = "";
 
-while (     $text =~ m/<@([^>]+)>/ ) {
-    $mention_uid = $1 if ( defined($1) );
-    if ( $mention_uid ne '' ) {
-      my $mention_name = $mention_uid;
-      if ( exists($users->{$mention_uid}) ) {
-	$mention_name = $users->{$mention_uid};
+    while (     $text =~ m/<@([^>]+)>/ ) {
+      $mention_uid = $1 if ( defined($1) );
+      if ( $mention_uid ne '' ) {
+	my $mention_name = $mention_uid;
+	if ( exists($users->{$mention_uid}) ) {
+	  $mention_name = $users->{$mention_uid};
+	}
+	$text =~ s/<\@$mention_uid>/\@$mention_name/;
       }
-      $text =~ s/<\@$mention_uid>/\@$mention_name/;
     }
-}
-
+    
     $text =~ s/</&lt;/g;
     $text =~ s/>/&gt;/g;
     $text =~ s/\n/<br>/g;
