@@ -72,6 +72,12 @@ my $ch = { id => $obj->param('channel_id'),
 name => $obj->param('channel_name'),
 updated => time
 };
+for (my $i = @$channels-1; $i >= 0; $i--) {
+if ( $channels->[$i]->{name} eq $ch->{name} ) {
+  delete($channels->[$i]);
+}
+}
+
 push @$channels, $ch;
 store($channels, "$channelfile");
 
