@@ -143,12 +143,12 @@ my $linked_channel_id;
 my $postdate = "$year/$mon/$day";
 
 if ( $current_date eq '00' ) {
-print "<h2>$postdate</h2>^n";
+print "<h2>$postdate</h2>\n";
 $current_date = $postdate       ;
 }
 
 if ( $current_date ne $postdate ) {
-	print "</ul><h2>$postdate</h2><ul>^n";
+	print "</ul><h2>$postdate</h2><ul>\n";
 	$current_date = $postdate;
 }
 
