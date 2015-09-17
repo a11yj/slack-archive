@@ -99,8 +99,9 @@ $chinfo = retrieve("$channelfile");
 </head>
 <body>
 <h1>#$channel on a11yj.slack.com チャンネル・アーカイブ</h1>
-<ul>
 EOM
+
+my $current_date = '00';
 
   foreach my $msg (@$data) {
     my $text = $msg->{text};
@@ -134,12 +135,24 @@ my $linked_channel_id;
     }
 
     $text =~ s/\n/<br>/g;
-        
-    print "<li>$msg->{user}: " . encode('UTF-8', $text);
+
     my ($sec, $min, $hr, $day, $mon, $year) = localtime($msg->{time});
     $year += 1900;
     $mon++;
-    print "<br>($year/$mon/$day $hr:$min:$sec)</li>\n";
+my $postdate = "$year/$mon/$day";
+
+if ( $current_date eq '00' ) {
+print "<h2>$postdate</h2><ul>\n";
+$current_date = $postdate       ;
+}
+
+if ( $current_date ne $postdate ) {
+	print "</ul><h2>$postdate</h2><ul>\n";
+	$current_date = $postdate;
+}
+
+    print "<li>$msg->{user}: " . encode('UTF-8', $text);
+    print "&nbsp;($hr:$min:$sec)</li>\n";
   }
   print '</ul><p><a href="/">アーカイブ・リストに戻る</a> - <a href="https://a11yj.herokuapp.com/">このSlack Teamに参加する</a></p></body></html>';
 
