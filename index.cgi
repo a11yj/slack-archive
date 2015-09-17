@@ -99,7 +99,6 @@ $chinfo = retrieve("$channelfile");
 </head>
 <body>
 <h1>#$channel on a11yj.slack.com チャンネル・アーカイブ</h1>
-<ul>
 EOM
 
 my $current_date = '00';
@@ -143,7 +142,7 @@ my $linked_channel_id;
 my $postdate = "$year/$mon/$day";
 
 if ( $current_date eq '00' ) {
-print "<h2>$postdate</h2>\n";
+print "<h2>$postdate</h2><ul>\n";
 $current_date = $postdate       ;
 }
 
